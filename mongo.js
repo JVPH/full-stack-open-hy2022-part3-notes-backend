@@ -1,53 +1,53 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {
-    console.log('Please provide the password as an argument: node mongo.js <password>');
-    process.exit(1);
+  console.log('Please provide the password as an argument: node mongo.js <password>')
+  process.exit(1)
 }
 
-const password = process.argv[2];
+const password = process.argv[2]
 
-const url = `mongodb+srv://fullstack:${password}@cluster0.udvmgn5.mongodb.net/phonebookApp?retryWrites=true&w=majority`;
+const url = `mongodb+srv://fullstack:${password}@cluster0.udvmgn5.mongodb.net/phonebookApp?retryWrites=true&w=majority`
 
-const phonebookEntrySchema = new mongoose.Schema({
-    name: String,
-    phone: String,
-});
+const personSchema = new mongoose.Schema({
+  name: String,
+  phone: String,
+})
 
-const PhonebookEntry = mongoose.model('PhonebookEntry', phonebookEntrySchema);
+const Person = mongoose.model('Person', personSchema)
 
 if (process.argv.length < 4){
-    mongoose
-        .connect(url)
-        .then(result => {
-            PhonebookEntry
-                .find({})  
-                .then(result => {
-                    result.forEach(phonebookEntry => {
-                        console.log(phonebookEntry);
-                    });
-                    mongoose.connection.close();
-                })
-        });
-}
-
-const name = process.argv[3];
-const phone = process.argv[4];
-
-mongoose
+  mongoose
     .connect(url)
     .then(result => {
-        console.log('connected');
-
-        const phonebookEntry = new PhonebookEntry({
-            name,
-            phone,
-        });
-
-        return phonebookEntry.save();
+      Person
+        .find({})
+        .then(result => {
+          result.forEach(person => {
+            console.log(person)
+          })
+          mongoose.connection.close()
+        })
     })
-    .then(() => {
-        console.log('Phonebook entry saved');
-        return mongoose.connection.close();
+}
+
+const name = process.argv[3]
+const phone = process.argv[4]
+
+mongoose
+  .connect(url)
+  .then(result => {
+    console.log('connected')
+
+    const person = new Person({
+      name,
+      phone,
     })
-    .catch((error) => console.log(error));
+
+    return person.save()
+  })
+  .then(() => {
+    console.log('Person saved')
+    return mongoose.connection.close()
+  })
+  .catch((error) => console.log(error))
