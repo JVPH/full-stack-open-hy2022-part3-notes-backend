@@ -10,7 +10,8 @@ app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
 
-morgan.token('data', (req, res) => {
+// eslint-disable-next-line no-unused-vars
+morgan.token('data', (req, _res) => {
   if(Object.keys(req.body).length === 0){
     return '-'
   }
@@ -20,11 +21,11 @@ morgan.token('data', (req, res) => {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 
-app.get('/', (request, response) => {
+app.get('/', (_request, response) => {
   response.send('<h1>Phonebook Backend</h1>')
 })
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (_request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
@@ -42,7 +43,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 })
 
-app.get('/info', async (request, response) => {
+app.get('/info', async (_request, response) => {
   const count = await Person.estimatedDocumentCount()
   response.write(`<p>Phonebook has info for ${count} people</p>`)
   response.write(`<p>${new Date()}</p>`)
@@ -50,7 +51,8 @@ app.get('/info', async (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
-  Person.findByIdAndDelete(request.params.id).then(result => {
+  // eslint-disable-next-line no-unused-vars
+  Person.findByIdAndDelete(request.params.id).then(_result => {
     response.status(204).end()
   })
     .catch(error => next(error))
@@ -96,13 +98,13 @@ app.post('/api/persons', (request, response, next) => {
 
 
 
-const unknownEndpoint = (request, response) => {
+const unknownEndpoint = (_request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
 
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, _request, response, next) => {
   console.error(error.message)
   console.log('error name: ', error.name)
   console.log('error code: ', error.code)

@@ -19,7 +19,8 @@ const Person = mongoose.model('Person', personSchema)
 if (process.argv.length < 4){
   mongoose
     .connect(url)
-    .then(result => {
+    // eslint-disable-next-line no-unused-vars
+    .then(_result => {
       Person
         .find({})
         .then(result => {
@@ -36,7 +37,8 @@ const phone = process.argv[4]
 
 mongoose
   .connect(url)
-  .then(result => {
+  // eslint-disable-next-line no-unused-vars
+  .then(_result => {
     console.log('connected')
 
     const person = new Person({
